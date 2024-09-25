@@ -1,5 +1,10 @@
 package com.example.warehouse;
 
+import com.example.finance.MessageFromProducer;
+import com.example.finance.MessageToProducer;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -14,6 +19,7 @@ import java.util.Properties;
 
 public class WarehouseConsumer {
     public static void main(String[] args) {
+        ObjectMapper objectMapper = new ObjectMapper();
         // Create Kafka consumer configuration
         Properties props = new Properties();
         props.put("bootstrap.servers", "localhost:9092");  // Kafka broker address
@@ -41,16 +47,21 @@ public class WarehouseConsumer {
                 for (ConsumerRecord<String, String> record : records) {
                     System.out.printf("Consumed message: key = %s, value = %s, partition = %d, offset = %d%n",
                             record.key(), record.value(), record.partition(), record.offset());
-                    sendAnswertToProducer(record.value());
+                    com.example.finance.MessageFromProducer message = objectMapper.readValue(record.value(), MessageFromProducer.class);
+                    sendAnswertToProducer(message);
                 }
             }
+        } catch (JsonMappingException e) {
+            throw new RuntimeException(e);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         } finally {
             consumer.close();  // Ensure consumer is closed on exit
         }
 
     }
 
-    private static void sendAnswertToProducer(String recordValue) {
+    private static void sendAnswertToProducer(MessageFromProducer message) throws JsonProcessingException {
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092"); // Adres serwera Kafka
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
@@ -60,9 +71,12 @@ public class WarehouseConsumer {
 
         String topic = "orders-confirmation";
 
-        String userInput = "Zamówienie " + recordValue + " otrzymano przez Warehause";
+        String userInput = "Zamówienie " + message.getText() + " otrzymano przez Warehause";
+        MessageToProducer messageFromFinanceToConsumer = new MessageToProducer(message.getTechID(), "warehouse");
 
-        ProducerRecord<String, String> record = new ProducerRecord<>(topic, userInput);
+        String jsonSendMessage = new ObjectMapper().writeValueAsString(messageFromFinanceToConsumer);
+
+        ProducerRecord<String, String> record = new ProducerRecord<>(topic, jsonSendMessage);
         producer.send(record);
 
         System.out.println("Wysłano wiadomość do Kafka: " + userInput);

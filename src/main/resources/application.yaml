@@ -10,3 +10,15 @@ spring:
             auto-offset-reset: earliest
             key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
             value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    datasource:
+        url: jdbc:h2:file:./data/testdb;AUTO_SERVER=TRUE
+#        url: jdbc:h2:mem:testdb
+        driver-class-name: org.h2.Driver
+        username: sa
+        password: ""
+    jpa:
+        database-platform: org.hibernate.dialect.H2Dialect
+    h2:
+        console:
+            enabled: true
+#            spring.datasource.url=jdbc:h2:file:./data/testdb;AUTO_SERVER=TRUE
