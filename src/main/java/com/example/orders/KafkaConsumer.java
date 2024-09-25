@@ -37,7 +37,7 @@ public class KafkaConsumer {
     @Transactional
     private void editEntity(AnswerFromConsumer answerFromConsumer) {
         OrderEntity byOrderTechId = orderRepository.findByOrderTechId(answerFromConsumer.getId());
-        System.out.println(byOrderTechId.getOrderTechId()+byOrderTechId.getText()+byOrderTechId.getStatusFinance()+byOrderTechId.getStatusWarehouse());
+
         if (answerFromConsumer.getName().equalsIgnoreCase("finance")) {
             byOrderTechId.setStatusFinance("Received");
         } else if (answerFromConsumer.getName().equalsIgnoreCase("warehouse")) {
