@@ -49,6 +49,7 @@ public class WarehouseConsumer {
         }
 
     }
+
     private static void sendAnswertToProducer(String recordValue) {
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092"); // Adres serwera Kafka

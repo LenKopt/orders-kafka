@@ -1,9 +1,6 @@
 package com.example.orders;
 
 import lombok.AllArgsConstructor;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -11,11 +8,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Duration;
-import java.util.Collections;
-import java.util.List;
 import java.util.Properties;
-import java.util.Scanner;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @AllArgsConstructor

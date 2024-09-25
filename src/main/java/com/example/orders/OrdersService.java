@@ -17,6 +17,7 @@ public class OrdersService {
     public ConcurrentLinkedQueue<String> getMessages() {
         return messages;
     }
+
     @KafkaListener(topics = "orders", groupId = "my-group")
     public void consume(ConsumerRecord<String, String> record) {
         System.out.println("Zamówienie: " + record.value() + " zostało wysłane");
