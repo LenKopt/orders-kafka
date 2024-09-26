@@ -20,15 +20,12 @@ public class OrderEntity {
     private String text;
     private String statusWarehouse;
     private String statusFinance;
-//    @Version
-//    private Integer version;
 
     public OrderEntity(String text, String statusWarehouse, String statusFinance) {
         this.orderTechId = UUID.randomUUID().toString();
         this.text = text;
         this.statusWarehouse = statusWarehouse;
         this.statusFinance = statusFinance;
-        //this.version = 0;
     }
 
     public void setStatusWarehouse(String statusWarehouse) {

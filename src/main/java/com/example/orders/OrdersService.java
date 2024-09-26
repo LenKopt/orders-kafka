@@ -1,6 +1,5 @@
 package com.example.orders;
 
-import com.example.finance.MessageFromProducer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Properties;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 @AllArgsConstructor
@@ -52,7 +50,6 @@ public class OrdersService {
 
         String topic = "orders";
 
-        //String userInput = order;
         SendMessage sendMessage = new SendMessage(orderEntity.getOrderTechId().toString(), orderEntity.getText());
         String jsonSendMessage = objectMapper.writeValueAsString(sendMessage);
 

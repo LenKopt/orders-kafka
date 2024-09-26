@@ -1,9 +1,7 @@
 package com.example.orders;
 
-import com.example.finance.MessageFromProducer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -24,10 +22,8 @@ public class KafkaConsumer {
         this.orderRepository = orderRepository;
     }
 
-    //@Transactional
     @KafkaListener(topics = "orders-confirmation", groupId = "my-group")
     public void consume(ConsumerRecord<String, String> record) throws JsonProcessingException {
-        //MessageFromProducer message = objectMapper.readValue(record.value(), MessageFromProducer.class);
         System.out.println("Received message: " + record.value());
         AnswerFromConsumer answerFromConsumer = objectMapper.readValue(record.value(), AnswerFromConsumer.class);
         editEntity(answerFromConsumer);
